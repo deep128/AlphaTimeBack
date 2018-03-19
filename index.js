@@ -14,12 +14,7 @@ var components = {
     modulesPath: []
 };
 
-var con = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'neural'
-});
+var con = mysql.createConnection(config.db);
 
 con.connect(function(err) {
     if (err) throw err;
