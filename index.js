@@ -14,17 +14,12 @@ var components = {
     modulesPath: []
 };
 
-var con = mysql.createConnection(config.db);
-
-con.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected to database!");
-  });
+var mongoose = require("./src/Server/db/mongoose").mongoose(config);
 
 var moduleArg = {
-    app: app,
-    con: con,
-    config: config
+    app,
+    mongoose,
+    config
 }
 
 

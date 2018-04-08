@@ -3,9 +3,6 @@
     "secret": "temp_secret",
 
     "db": {
-        "host": "localhost",
-        "user": "root",
-        "password": "",
-        "database": "ClassTime"
+        "url": "mongodb://localhost:27017/ClassTime"
     }
 }

@@ -2,26 +2,23 @@
  // module
 
 var jwt = require("jsonwebtoken");
+var _ = require("lodash");
+var {User} = require("../Models/User");
 
 module.exports = function(moduleArg) {
-    moduleArg.app.get("/api/authservice", function(req, res) {
-        if(!req.headers.authorization) {
-            throw "Unauthorized!";
-        }
-        var pattern = /^Basic /;
-        var match = pattern.exec(req.headers.authorization);
-        if(match) {
-            var auth = Buffer.from(req.headers.authorization.replace(pattern,""),'base64').toString().split(":");
-        }
-        else {
-            throw "Unauthorized!";
-        } 
-
-        var userAuth = {
-            username : auth[0],
-            password : auth[1]
-        }
-
+    moduleArg.app.post("/api/authservice", function(req, res) {
+        
+        var body = _.pick(req.body, ["Username", "Password"]);
+        
+        User.findOne({
+            Username: body.Username,
+            Password: body.Password
+        }).then((user) => {
+            res.send(user);
+        });
+        
+        
+        /*
         const sql = `SELECT id  FROM users WHERE username = '${userAuth.username}' AND password = '${userAuth.password}'`;
 
         moduleArg.con.query(sql, function (err, result) {
@@ -38,10 +35,10 @@ module.exports = function(moduleArg) {
                 res.status(200);
                 res.end(token);
             }
-          });
-        });
+          }); */
+    });
 
-    moduleArg.app.get("/api/authservice/:token", function(req, res) {
+    /*moduleArg.app.get("/api/authservice/:token", function(req, res) {
         var token = req.params.token;
         jwt.verify(token, moduleArg.config.secret, function(err, decoded) {
             if(err) {
@@ -60,5 +57,5 @@ module.exports = function(moduleArg) {
             });
             }
         });
-    });
+    });*/
 }
