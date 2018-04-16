@@ -14,12 +14,14 @@ var components = {
     modulesPath: []
 };
 
-var mongoose = require("./src/Server/db/mongoose").mongoose(config);
+var bookshelf = require("./src/Server/db/connect").bookshelf(config);
+var dbModels = require("./src/Server/db/dbModles").createModels(bookshelf);
 
 var moduleArg = {
     app,
-    mongoose,
-    config
+    bookshelf,
+    config,
+    dbModels
 }
 
 
