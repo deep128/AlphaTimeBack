@@ -7,8 +7,6 @@ var mysql = require("mysql");
 console.log("Reading config...");
 var config = JSON.parse(fs.readFileSync("./config.json","UTF-8"));
 
-var app = require("./src/Server/server")(config);
-
 
 var components = {
     modulesPath: []
@@ -23,6 +21,9 @@ var moduleArg = {
     config,
     dbModels
 }
+
+var app = require("./src/Server/server")(moduleArg);
+moduleArg.app = app;
 
 
 console.log("Reading source...");

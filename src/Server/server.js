@@ -1,5 +1,5 @@
 
-module.exports = function(config) {
+module.exports = function(moduleArg) {
     var express = require("express");
     var cors = require("cors");
     var bodyParser = require("body-parser");
@@ -7,12 +7,10 @@ module.exports = function(config) {
     var crypto = require("crypto");
     var jwt = require("jsonwebtoken");
 
-    //config.secret = crypto.randomBytes(20).toString();
-
     var app = express();
 
     console.log("starting server...");
-    var server = app.listen(config.port,()=>{
+    var server = app.listen(moduleArg.config.port,()=>{
         console.log(`Listning on http://${server.address().address}:${server.address().port}`)
     });
 
@@ -23,8 +21,32 @@ module.exports = function(config) {
     app.use(cookieParser());
     app.use(function(req, res, next) {
 
+        var {User} = moduleArg.dbModels;
+
         console.log(`${req.method}: ${req.url}   ${JSON.stringify(req.body)}`);
-        next();
+        if(req.headers['x-auth']) {
+            const token = req.header['x-auth'];
+            jwt.verify(token, moduleArg.config.secret, (err, decoded)=>{
+                if(err) {
+                    res.status(400).end("Unauthorized");
+                    return;
+                }
+
+                new User({"id":decoded.id}).fetch({columns:"id"}).then((user)=>{
+                    if(user == null) {
+                        res.status(400).end();
+                        return;
+                    }
+                }).catch((err)=>{
+                    res.status(500).send("Error handleing the request");
+                });
+
+                next();
+            });
+        }
+        else {
+            next();
+        }
     });
 
     return app;

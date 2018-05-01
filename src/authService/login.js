@@ -40,11 +40,9 @@
         
         jwt.verify(token, moduleArg.config.secret, function(err, decoded) {
             if(err) {
-                console.log("invalin token: ", token);
                 res.status(400).end("Unauthorized");
             }
             else {
-                console.log("Userid: ", decoded.id);
                 new User({"id":decoded.id}).fetch({columns:"id"}).then((user)=>{
                     if(user == null) {
                         res.status(400).end();
@@ -54,7 +52,6 @@
                     res.status(202).end("");
                 }).catch((err)=>{
                     res.status(500).send("Error handleing the request");
-                    console.log(err);
                 });
 
 
