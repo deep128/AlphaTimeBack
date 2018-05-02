@@ -1,3 +1,4 @@
+var request = require('request');
 
 module.exports = function(moduleArg) {
     var express = require("express");
@@ -19,29 +20,36 @@ module.exports = function(moduleArg) {
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended: false}));
     app.use(cookieParser());
-    app.use(function(req, res, next) {
+    app.use((req, res, next)=> {
+        console.log(`${req.method}: ${req.url}   ${JSON.stringify(req.body)}`);
+        next();
+    });
+
+    app.use((req, res, next)=> {
 
         var {User} = moduleArg.dbModels;
-
-        console.log(`${req.method}: ${req.url}   ${JSON.stringify(req.body)}`);
+        
         if(req.headers['x-auth']) {
-            const token = req.header['x-auth'];
+            const token = req.headers['x-auth'];
             jwt.verify(token, moduleArg.config.secret, (err, decoded)=>{
                 if(err) {
                     res.status(400).end("Unauthorized");
                     return;
                 }
-
                 new User({"id":decoded.id}).fetch({columns:"id"}).then((user)=>{
                     if(user == null) {
                         res.status(400).end();
                         return;
+                    
                     }
+                    req.data = {
+                        userid: user.id
+                    };
+                    next();
                 }).catch((err)=>{
                     res.status(500).send("Error handleing the request");
                 });
 
-                next();
             });
         }
         else {

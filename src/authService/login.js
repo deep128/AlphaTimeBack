@@ -10,7 +10,7 @@
 
     var {User} = moduleArg.dbModels;
 
-    moduleArg.app.post("/api/login", function(req, res) {
+    moduleArg.app.post("/api/login", (req, res)=> {
         
         var body = _.pick(req.body, ["username", "password"]);
         new User({"Username":body.username,"Password":body.password}).fetch({columns:"id"}).then((user)=>{
@@ -34,31 +34,6 @@
         
     });
 
-
-    moduleArg.app.post("/api/authservice", function(req, res) {
-        var {token} = _.pick(req.body,["token"]);
-        
-        jwt.verify(token, moduleArg.config.secret, function(err, decoded) {
-            if(err) {
-                res.status(400).end("Unauthorized");
-            }
-            else {
-                new User({"id":decoded.id}).fetch({columns:"id"}).then((user)=>{
-                    if(user == null) {
-                        res.status(400).end();
-                        return;
-                    }
-
-                    res.status(202).end("");
-                }).catch((err)=>{
-                    res.status(500).send("Error handleing the request");
-                });
-
-
-            }
-        });
-
-    });
  }
 
  function createJWTToken(id, key) {
