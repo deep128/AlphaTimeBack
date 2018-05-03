@@ -1,4 +1,5 @@
 var request = require('request');
+var path = require('path');
 
 module.exports = function(moduleArg) {
     var express = require("express");
@@ -14,8 +15,8 @@ module.exports = function(moduleArg) {
     var server = app.listen(moduleArg.config.port,()=>{
         console.log(`Listning on http://${server.address().address}:${server.address().port}`)
     });
-
-    app.use(express.static("./public"));
+    console.log();
+    app.use("/public",express.static(path.join(path.dirname(require.main.filename), 'public')));
     app.use(cors());
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended: false}));
