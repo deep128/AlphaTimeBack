@@ -17,6 +17,7 @@ module.exports = function(moduleArg) {
     });
     console.log();
     app.use("/public",express.static(path.join(path.dirname(require.main.filename), 'public')));
+    app.use("/Images",express.static(path.join(path.dirname(require.main.filename), 'Images')));
     app.use(cors());
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended: false}));
