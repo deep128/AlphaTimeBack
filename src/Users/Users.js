@@ -13,7 +13,7 @@ module.exports = function(moduleArg) {
         var usernameList = JSON.parse(req.query.usernameList);
         User.forge().query(function(qb) {
             qb.where("username", "IN", usernameList);
-        })        
+        })
         .fetchAll(
             {columns:["id","username","email","firstname","lastname"],
             withRelated:["user_profile"]
@@ -24,6 +24,7 @@ module.exports = function(moduleArg) {
             });;
             res.status(200).send(response);
         },err => {
+            moduleArg.myUtils.logError(err);
             res.status("500").send("Internal Error");
         });
     });
@@ -41,7 +42,7 @@ module.exports = function(moduleArg) {
             }
             res.status(200).send(setUserValues(user));
         }).catch((err)=>{
-            console.log(err);
+            moduleArg.myUtils.logError(err);
             res.status(500).send("Error handleing the request");
         });
     

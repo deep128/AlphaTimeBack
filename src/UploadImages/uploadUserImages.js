@@ -19,7 +19,7 @@ module.exports = function(moduleArg) {
         var upload = multer({dest: userImagesPath}).single("UploadFile");
         upload(req,res,(err) => {
             if(err) {
-                console.log("Error", err);
+                moduleArg.myUtils.logError(err);
                 res.status(500).send("Internal Error");
                 return;
             }
@@ -29,21 +29,30 @@ module.exports = function(moduleArg) {
                 imageName += ".jpg";
                 fs.rename(req.file.path, path.join(userImagesPath,imageName), function (err) {
                     if (err) {
+                        moduleArg.myUtils.logError(err);
                         res.status(500).send("Internal Error");
                     }
 
-                    new User_Profile({id: userid})
-                    .save({profile_pic: imageName})
-                    .then(()=>{
-                        res.send({
-                            success:true,
-                            msg: "File Uploaded"
+                    new User_Profile({id: userid}).fetch({columns:["profile_pic"]}).then((user_profile)=>{
+                        
+                        fs.unlink(path.join(userImagesPath,user_profile.attributes.profile_pic),err => {
+                            moduleArg.myUtils.logError(err);
                         });
-                    },(err)=>{
-                        res.send({
-                            success:false,
-                            msg: "File type not suppoted"
+
+                        new User_Profile({id: userid})
+                        .save({profile_pic: imageName})
+                        .then((user_profile)=>{
+                            res.send({
+                                success:true,
+                                msg: "File Uploaded"
+                            });
+                        },(err)=>{
+                            res.send({
+                                success:false,
+                                msg: "File type not suppoted"
+                            });
                         });
+
                     });
                 });
             }

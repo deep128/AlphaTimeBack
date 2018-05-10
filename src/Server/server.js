@@ -49,6 +49,7 @@ module.exports = function(moduleArg) {
                     };
                     next();
                 }).catch((err)=>{
+                    moduleArg.myUtils.logError(err);
                     res.status(500).send("Error handleing the request");
                 });
 

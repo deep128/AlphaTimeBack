@@ -6,9 +6,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "engines": {
+    "node":"9.11.1"
+  },
   "repository": {
     "type": "git",
-    "url": "nural-server"
+    "url": "https://github.com/deep128/AlphaTimeBack"
   },
   "keywords": [
     "nuralServer"

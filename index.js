@@ -6,6 +6,7 @@ var mysql = require("mysql");
 
 console.log("Reading config...");
 var config = JSON.parse(fs.readFileSync("./config.json","UTF-8"));
+var myUtils = require("./src/Utilities/MyUtils")(config);
 
 
 var components = {
@@ -19,7 +20,8 @@ var moduleArg = {
     app,
     bookshelf,
     config,
-    dbModels
+    dbModels,
+    myUtils
 }
 
 var app = require("./src/Server/server")(moduleArg);
