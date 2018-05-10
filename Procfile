@@ -1,1 +1,1 @@
-web: node node index;
+web: node index;
