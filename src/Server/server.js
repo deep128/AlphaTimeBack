@@ -12,7 +12,7 @@ module.exports = function(moduleArg) {
     var app = express();
 
     console.log("starting server...");
-    var server = app.listen(moduleArg.config.port,()=>{
+    var server = app.listen(process.env.PORT || moduleArg.config.port,()=>{
         console.log(`Listning on http://${server.address().address}:${server.address().port}`)
     });
     console.log();
