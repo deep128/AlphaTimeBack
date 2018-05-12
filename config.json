@@ -3,10 +3,14 @@
     "secret": "temp_secret",
 
     "db": {
-        "url": "mongodb://localhost:27017/ClassTime"
+        "host": "us-cdbr-iron-east-04.cleardb.net",
+        "user": "baf88e376ccb2b",
+        "password": "ccea7053",
+        "database": "heroku_9d190a125f8b869"
     },
 
     "urls": {
         "errorLogs": "/Logs/ErrorLogs.txt"
     }
 }
+
