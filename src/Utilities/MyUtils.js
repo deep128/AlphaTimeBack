@@ -3,6 +3,12 @@ const path = require("path");
 
 module.exports = function(config) {
 
+    function logError(err,res) {
+        logError(err);
+        res.status(500).send("Error handleing the request");
+    }
+
+
     function logError(err) {
         if(err != null) {
             err = err.stack.replace("\n","\r\n").replace("\r\r\n","\r\n") +

@@ -1,4 +1,4 @@
-
+var mysql = require("mysql");
 
 var bookshelf = function (config) {
     var knex = require("knex")({
@@ -9,7 +9,13 @@ var bookshelf = function (config) {
 
     return bookshelf_v;
 }
+var con = function (config) {
+    conn = mysql.createConnection(config.db);
+
+    return conn;
+}
 
 module.exports = {
-    bookshelf
+    bookshelf,
+    con
 }

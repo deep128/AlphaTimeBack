@@ -19,8 +19,7 @@ module.exports = function(moduleArg) {
         var upload = multer({dest: userImagesPath}).single("UploadFile");
         upload(req,res,(err) => {
             if(err) {
-                moduleArg.myUtils.logError(err);
-                res.status(500).send("Internal Error");
+                moduleArg.myUtils.logError(err,res);
                 return;
             }
             var imageName = uuid.v4();
@@ -29,8 +28,7 @@ module.exports = function(moduleArg) {
                 imageName += ".jpg";
                 fs.rename(req.file.path, path.join(userImagesPath,imageName), function (err) {
                     if (err) {
-                        moduleArg.myUtils.logError(err);
-                        res.status(500).send("Internal Error");
+                        moduleArg.myUtils.logError(err, res);
                     }
 
                     new User_Profile({id: userid}).fetch({columns:["profile_pic"]}).then((user_profile)=>{

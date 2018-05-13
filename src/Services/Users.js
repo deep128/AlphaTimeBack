@@ -24,8 +24,7 @@ module.exports = function(moduleArg) {
             });;
             res.status(200).send(response);
         },err => {
-            moduleArg.myUtils.logError(err);
-            res.status("500").send("Internal Error");
+            moduleArg.myUtils.logError(err, res);
         });
     });
 
@@ -36,14 +35,13 @@ module.exports = function(moduleArg) {
             withRelated:['user_profile']
         }).then((user)=>{
             if(user == null) {
-                res.status(400).end();
+                res.status(404).end();
                 return;
             
             }
             res.status(200).send(setUserValues(user));
         }).catch((err)=>{
-            moduleArg.myUtils.logError(err);
-            res.status(500).send("Error handleing the request");
+            moduleArg.myUtils.logError(err, res);
         });
     
     }

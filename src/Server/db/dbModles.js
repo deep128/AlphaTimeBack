@@ -11,6 +11,9 @@ function createModels(bookshelf) {
             idAttribute: "id",
             user_profile: function() {
                 return this.hasOne(models.User_Profile,"id");
+            },
+            school: function() {
+                return this.belongsTo(models.School,"principleid")
             }
         });
 
@@ -31,6 +34,9 @@ function createModels(bookshelf) {
             idAttribute:"id",
             user_profile: function() {
                 return this.hasManny(models.User_Profile,"schoolId");
+            },
+            principle: function() {
+                return this.hasOne(models.User,"id")
             }
         });
 

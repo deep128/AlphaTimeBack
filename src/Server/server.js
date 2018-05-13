@@ -49,14 +49,17 @@ module.exports = function(moduleArg) {
                     };
                     next();
                 }).catch((err)=>{
-                    moduleArg.myUtils.logError(err);
-                    res.status(500).send("Error handleing the request");
+                    moduleArg.myUtils.logError(err, res);
                 });
 
             });
         }
         else {
-            next();
+            if(req.url.split("/")[1]=='api')
+                next();
+            else {
+                res.status(400).end("Unauthorized");
+            }
         }
     });
 
