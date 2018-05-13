@@ -55,7 +55,7 @@ module.exports = function(moduleArg) {
             });
         }
         else {
-            if(req.url.split("/")[1]=='api')
+            if(['api','Images','public'].indexOf(req.url.split("/")[1])>=0)
                 next();
             else {
                 res.status(400).end("Unauthorized");
