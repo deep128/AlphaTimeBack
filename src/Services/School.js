@@ -14,30 +14,24 @@ module.exports = function(moduleArg) {
             sql += `user_profile.id = ${userid}`;
         else
             sql += `school.id = ${schoolid}`;
-        con.query(sql,(err,result,fields)=>{
-            if(err) {
-                moduleArg.myUtils.logError(err, res);
-                return;
+        
+        moduleArg.sqlquery(sql, (result,fields)=>{
+            if(result.length > 0) {
+                res.send({
+                    school:{
+                        id: result[0].id,
+                        name: result[0].name
+                    },
+                    success: true
+                });
             }
             else {
-                if(result.length > 0) {
-                    res.send({
-                        school:{
-                            id: result[0].id,
-                            name: result[0].name
-                        },
-                        success: true
-                    });
-                }
-                else {
-                    res.send({
-                        msg: "Not found",
-                        success: false
-                    });
-                }
+                res.send({
+                    msg: "Not found",
+                    success: false
+                });
             }
         });
-        
     });
 
 

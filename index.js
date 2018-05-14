@@ -14,6 +14,7 @@ var components = {
 
 var bookshelf = require("./src/Server/db/connect").bookshelf(config);
 var con = require("./src/Server/db/connect").con(config);
+var {sqlquery} = require("./src/Server/db/connect");
 var dbModels = require("./src/Server/db/dbModles").createModels(bookshelf);
 
 var moduleArg = {
@@ -22,7 +23,8 @@ var moduleArg = {
     config,
     dbModels,
     myUtils,
-    con
+    con,
+    sqlquery
 }
 
 var app = require("./src/Server/server")(moduleArg);
