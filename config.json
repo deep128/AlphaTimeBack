@@ -9,6 +9,7 @@
         "database": "heroku_9d190a125f8b869"
     },
 
+    
     "urls": {
         "errorLogs": "/Logs/ErrorLogs.txt"
     }
