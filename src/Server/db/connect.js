@@ -1,4 +1,5 @@
 var mysql = require("mysql");
+var myUtils;
 
 var bookshelf = function (config) {
     var knex = require("knex")({
@@ -30,11 +31,12 @@ function dbConnect(config) {
 var con = function (config) {
     
     dbConnect(config);
+    myUtils = require("../../Utilities/MyUtils")(config);
 
     conn.on("error", function (error) {
         if (error instanceof Error) {
             if (error.code === "PROTOCOL_CONNECTION_LOST") {
-                console.error(error.stack);
+                myUtils.logErrorS(error.stack);
                 console.log("Lost connection. Reconnecting...");
                 conn.end();
                 dbConnect(config);
@@ -51,7 +53,7 @@ function sqlquery(sql, callback) {
   
       conn.query(sql,(err,result,fields)=>{
         if(err) {
-            moduleArg.myUtils.logError(err, res);
+            myUtils.logErrorS(err);
             return;
         }
         else {

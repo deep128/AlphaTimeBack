@@ -1,18 +1,23 @@
 // Module
 
+_ = require("lodash");
+
 module.exports = function(moduleArg) {
 
     const con = moduleArg.con;
+    const app = moduleArg.app;
+    sqlquery = moduleArg.sqlquery;
 
-    moduleArg.app.get("/classesbyschool",(req , res)=>{
+    app.get("/classesbyschool",(req , res)=>{
 
         const schoolid = req.query.schoolid;
         const userid = req.data.userid;
         
         var sql = `SELECT class.*, user.username AS classteacherusername, CONCAT(user.firstname, ' ', user.lastname) AS classteachername FROM class
         LEFT JOIN user ON class.classteacherid = user.id
-        WHERE class.schoolid = ${schoolid}`;
-        moduleArg.sqlquery(sql, (result,fields)=>{
+        WHERE class.schoolid = ${schoolid}
+        ORDER BY class.level, class.name`;
+        sqlquery(sql, (result,fields)=>{
             if(result.length > 0) {
                 res.send({
                     classes:result,
@@ -28,18 +33,16 @@ module.exports = function(moduleArg) {
         });
     });
 
-
-    function getSchool(schoolid, res) {
-        new School({"id":schoolid}).fetch({
-            columns:["name"],
-            withRelated:["principle", "principle.user_profile"]
-        }).then(school=>{
-            console.log(school);
-            console.log(school.relations.principle.relatedData);
-            res.status(200).send();
-        }).catch(err=>{
-            moduleArg.myUtils.logError(err);
-        });;
-    }
+    app.post("/saveclass",(req,res)=>{
+        const userid = req.data.userid;
+        const vclass = _.pick(req.body,["id","name","level","schoolid"]);
+        var sql = `INSERT INTO class (name,level,schoolid) values('${vclass.name}',${vclass.level},${vclass.schoolid})`;
+        sqlquery(sql,(result,fields)=>{
+            console.log("result: ",result);
+            res.send({
+                success:true
+            });
+        });
+    });
 
 }
