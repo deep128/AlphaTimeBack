@@ -10,10 +10,8 @@ module.exports = function(config) {
 
 
     function logErrorS(err) {
-        if(err != null) {
-            err = err.stack.replace("\n","\r\n").replace("\r\r\n","\r\n") +
-            "\r\n\r\n===========================================================\r\n\r\n";
-        }
+        err = err.replace("\n","\r\n").replace("\r\r\n","\r\n") +
+        "\r\n\r\n===========================================================\r\n\r\n";
         currDate = new Date();
         err = new Date() + "\r\n\r\n" + err;
 
